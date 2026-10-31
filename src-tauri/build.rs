@@ -1,7 +1,6 @@
 fn main() {
-    let attributes = tauri_build::Attributes::new().app_manifest(
-        tauri_build::AppManifest::new().commands(&["open_instagram"]),
-    );
+    let attributes = tauri_build::Attributes::new()
+        .app_manifest(tauri_build::AppManifest::new().commands(&["open_instagram"]));
 
     tauri_build::try_build(attributes).expect("failed to run tauri-build");
 }
