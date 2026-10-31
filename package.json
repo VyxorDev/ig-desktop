@@ -7,7 +7,12 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "icons": "tauri icon src-tauri/icons/icon.png",
+    "pretauri": "npm run icons",
+    "tauri": "tauri",
+    "doctor": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/doctor.ps1",
+    "repair:cargo": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/repair-cargo-cache.ps1",
+    "check": "npm run icons && npm run build && cargo fmt --manifest-path src-tauri/Cargo.toml --all -- --check && cargo check --manifest-path src-tauri/Cargo.toml --all-targets && cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.12.4",

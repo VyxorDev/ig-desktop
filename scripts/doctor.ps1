@@ -144,7 +144,7 @@ if (Test-Path $sourceRoot) {
 
 if ($script:knownCorruption) {
   Write-Result "FAIL" "The cached http-1.5.0 Cargo manifest contains NUL bytes and is corrupted"
-  Write-Host "       Repair: powershell -ExecutionPolicy Bypass -File .\scripts\repair-cargo-cache.ps1" -ForegroundColor Yellow
+  Write-Host "       Repair: npm run repair:cargo" -ForegroundColor Yellow
 } else {
   Write-Result "OK" "Known http-1.5.0 Cargo cache corruption was not detected"
 }
@@ -153,7 +153,8 @@ $requiredFiles = @(
   "package.json",
   "src-tauri\Cargo.toml",
   "src-tauri\tauri.conf.json",
-  "src-tauri\icons\icon.png"
+  "src-tauri\icons\icon.png",
+  "src-tauri\icons\icon.ico"
 )
 
 foreach ($relativePath in $requiredFiles) {

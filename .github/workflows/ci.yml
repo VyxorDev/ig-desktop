@@ -58,6 +58,13 @@ jobs:
       - name: Install frontend dependencies
         run: npm install
 
+      - name: Generate platform icons
+        run: npm run icons
+
+      - name: Run Windows environment doctor
+        if: runner.os == 'Windows'
+        run: npm run doctor
+
       - name: Build frontend
         run: npm run build
 
@@ -77,3 +84,23 @@ jobs:
       - name: Build Windows app (no installer)
         if: runner.os == 'Windows'
         run: npm run tauri build -- --no-bundle
+
+      - name: Upload Windows test executable
+        if: runner.os == 'Windows' && github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ig-desktop-windows-dev
+          path: src-tauri/target/release/ig-desktop.exe
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload generated lockfiles
+        if: runner.os == 'Windows' && github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ig-desktop-lockfiles
+          path: |
+            package-lock.json
+            src-tauri/Cargo.lock
+          if-no-files-found: error
+          retention-days: 7
