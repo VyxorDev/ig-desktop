@@ -63,7 +63,12 @@ Test-Tool "node"
 Test-Tool "npm"
 Test-Tool "cargo"
 Test-Tool "rustc"
-Test-Tool "rustup"
+
+if (Get-Command rustup -ErrorAction SilentlyContinue) {
+  Write-Result "OK" "rustup is available"
+} else {
+  Write-Result "WARN" "rustup is not available; cargo/rustc are usable but Rust toolchain management will be less convenient"
+}
 
 $rustHost = (& rustc -vV 2>&1 | Where-Object { $_ -like "host:*" } | Select-Object -First 1)
 if ($rustHost) {
