@@ -1,21 +1,36 @@
 use tauri::{Manager, WebviewUrl, WebviewWindowBuilder};
 
 const INSTAGRAM_URL: &str = "https://www.instagram.com/";
-const MOBILE_USER_AGENT: &str = "Mozilla/5.0 (Linux; Android 15; Pixel 9 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Mobile Safari/537.36";
+const MOBILE_USER_AGENT: &str = "Mozilla/5.0 (Linux; Android 15; Pixel 9 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Mobile Safari/537.36";
 
 #[tauri::command]
 async fn open_instagram(app: tauri::AppHandle, mode: String) -> Result<(), String> {
-    let (label, title, width, height, mobile) = match mode.as_str() {
+    let (label, other_label, title, width, height, mobile) = match mode.as_str() {
         "desktop" => (
             "instagram-desktop",
+            "instagram-mobile",
             "Instagram · Desktop",
             1180.0,
             820.0,
             false,
         ),
-        "mobile" => ("instagram-mobile", "Instagram · Mobile", 480.0, 900.0, true),
+        "mobile" => (
+            "instagram-mobile",
+            "instagram-desktop",
+            "Instagram · Mobile",
+            480.0,
+            900.0,
+            true,
+        ),
         _ => return Err(format!("Unsupported Instagram mode: {mode}")),
     };
+
+    // Keep only one presentation mode alive at a time. Desktop and mobile
+    // webviews share the same WebView2 browser profile, and a user-agent
+    // override can also influence shared service-worker behavior.
+    if let Some(other_window) = app.get_webview_window(other_label) {
+        other_window.close().map_err(|error| error.to_string())?;
+    }
 
     if let Some(window) = app.get_webview_window(label) {
         window.show().map_err(|error| error.to_string())?;
