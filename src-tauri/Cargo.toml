@@ -1,0 +1,16 @@
+[package]
+name = "ig-desktop"
+version = "0.1.0"
+description = "A better desktop client for Instagram"
+authors = ["VyxorDev"]
+edition = "2021"
+
+[lib]
+name = "ig_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2.12.5", features = [] }
