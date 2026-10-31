@@ -36,13 +36,16 @@ function Test-Tool {
     return
   }
 
-  $output = & $Name @Arguments 2>&1 | Select-Object -First 1
-  if ($LASTEXITCODE -ne 0) {
+  $output = & $Name @Arguments 2>&1
+  $succeeded = $?
+  $firstLine = $output | Select-Object -First 1
+
+  if (-not $succeeded) {
     Write-Result "FAIL" "$Name exists but did not run successfully"
     return
   }
 
-  Write-Result "OK" ("{0}: {1}" -f $Name, $output)
+  Write-Result "OK" ("{0}: {1}" -f $Name, $firstLine)
 }
 
 Write-Host "IG Desktop doctor" -ForegroundColor Cyan
