@@ -151,10 +151,9 @@ if ($script:knownCorruption) {
 
 $requiredFiles = @(
   "package.json",
+  "assets\app-icon.svg",
   "src-tauri\Cargo.toml",
-  "src-tauri\tauri.conf.json",
-  "src-tauri\icons\icon.png",
-  "src-tauri\icons\icon.ico"
+  "src-tauri\tauri.conf.json"
 )
 
 foreach ($relativePath in $requiredFiles) {
@@ -164,6 +163,13 @@ foreach ($relativePath in $requiredFiles) {
   } else {
     Write-Result "FAIL" "Project file missing: $relativePath"
   }
+}
+
+$generatedIcon = Join-Path $repoRoot "src-tauri\icons\icon.ico"
+if (Test-Path $generatedIcon) {
+  Write-Result "OK" "Generated Tauri platform icons are present"
+} else {
+  Write-Result "WARN" "Generated platform icons are not present yet; npm run tauri will create them automatically"
 }
 
 try {
