@@ -6,7 +6,13 @@ const MOBILE_USER_AGENT: &str = "Mozilla/5.0 (Linux; Android 15; Pixel 9 Pro) Ap
 #[tauri::command]
 async fn open_instagram(app: tauri::AppHandle, mode: String) -> Result<(), String> {
     let (label, title, width, height, mobile) = match mode.as_str() {
-        "desktop" => ("instagram-desktop", "Instagram · Desktop", 1180.0, 820.0, false),
+        "desktop" => (
+            "instagram-desktop",
+            "Instagram · Desktop",
+            1180.0,
+            820.0,
+            false,
+        ),
         "mobile" => ("instagram-mobile", "Instagram · Mobile", 480.0, 900.0, true),
         _ => return Err(format!("Unsupported Instagram mode: {mode}")),
     };
